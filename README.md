@@ -88,7 +88,7 @@ There are a few possible sensor values for each Eight Sleep side. Some ones with
 | Last Prime              | Bed   | Datetime    | Yes      |                                                                                                                                                                                                 |
 | Needs Priming           | Bed   | Boolean     | Yes      |                                                                                                                                                                                                 |
 | Room Temperature        | Bed   | Temperature | Yes      |                                                                                                                                                                                                 |
-| Bed Presence            | Side  | Presence    | **No**   | Uses behaviours from bed to try and predict presence. <br>Since eight sleep doesn't expose live presence in the API, can't currently pull a reliable value.                                     |
+| Bed Presence            | Side  | Presence    | Soft of  | Uses behaviours during a sleep session to calculate presence. <br>Since eight sleep doesn't expose live presence in the API, can't currently pull a reliable value.                             |
 | Bed State               | Side  | Percent     | Sort Of  | This value is pulled directly from the API and relates to the target heating level. While it may not seem to relate to anything, some people are able to use it to correlate a bed presence to. |
 | Bed State Type          | Side  | String      | Yes      | Options are: "off", "smart:bedtime", "smart:initial", "smart:final"                                                                                                                             |
 | Bed Temperature         | Side  | Temperature | Yes*     | Only accurate when the pod is on.                                                                                                                                                               |
@@ -117,8 +117,7 @@ Sensor values are updated every 5 minutes
   - I believe you can use this integration without a subscription. This integration uses the same calls as the app. And I believe the app allows the calls the integration is using, even when not having a subscription.
 I don't have any way to test it out though, because I have a grandfathered account.
 - Can I use this integration to get a reliable, current bed presence?
-  - No. Unfortunately, this a restriction imposed by 8 sleep. The app API doesn't expose bed state. The bed state works by guessing patterns based on the bed temperature changes, but isn't very reliable.
-The only real solution is for 8 sleep to expose the bed state in their API, which they would be able to do since the cover sends that info to their servers.
+  - Somewhat when a session is active. This integration attempts to calculate presence based on body sensor telemetry,
 ### Credits ###
 Thanks to @mezz64 and @raman325 for developing the previous Eight Sleep integration.
 
