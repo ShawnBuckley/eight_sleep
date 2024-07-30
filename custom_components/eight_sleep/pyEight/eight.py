@@ -14,6 +14,7 @@ import atexit
 from datetime import datetime
 import pytz
 import logging
+import statistics
 from typing import Any
 import time
 
@@ -282,26 +283,11 @@ class EightSleep:
     @property
     def room_temperature(self) -> float | None:
         """Return room temperature for both sides of bed."""
-        # Check which side is active, if both are return the average
-        tmp = None
-        tmp2 = None
-        for user in self.users.values():
-            if user.current_values["processing"]:
-                if tmp is None:
-                    tmp = user.current_values["room_temp"]
-                else:
-                    tmp = (tmp + user.current_values["room_temp"]) / 2
-            else:
-                if tmp2 is None:
-                    tmp2 = user.current_values["room_temp"]
-                else:
-                    tmp2 = (tmp2 + user.current_values["room_temp"]) / 2
-
-        if tmp is not None:
-            return tmp
-
-        # If tmp2 is None we will just return None
-        return tmp2
+        temps = [i.current_values["room_temp"] for i in self.users.values() if i.current_values["processing"]]
+        values = [i for i in temps if i is not None]
+        if values:
+            statistics.mean(values)
+        return None
 
     def handle_device_json(self, data: dict[str, Any]) -> None:
         """Manage the device json list."""
