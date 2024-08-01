@@ -283,10 +283,15 @@ class EightSleep:
     @property
     def room_temperature(self) -> float | None:
         """Return room temperature for both sides of bed."""
-        temps = [i.current_values["room_temp"] for i in self.users.values() if i.current_values["processing"]]
+        temps = [i.current_values["room_temp"] for i in self.users.values() if i.current_session_processing]
+        _LOGGER.error("RT: temps = " + str(temps))
         values = [i for i in temps if i is not None]
+        _LOGGER.error("RT: values = " + str(values))
         if values:
-            statistics.mean(values)
+            value = statistics.mean(values)
+            _LOGGER.error("RT: value = " + str(value))
+            return value
+        _LOGGER.error("RT: is None ")
         return None
 
     def handle_device_json(self, data: dict[str, Any]) -> None:
@@ -301,6 +306,7 @@ class EightSleep:
         # Want to keep last 10 readings so purge the last after we add
         self.handle_device_json(device_resp["result"])
         for obj in self.users.values():
+            _LOGGER.error("PR: handling user " + obj.user_id)
             obj.presence_heartbeat()
 
     async def api_request(

@@ -559,6 +559,8 @@ class EightUser:  # pylint: disable=too-many-public-methods
         """Detect presence during a session based on sensor data"""
         if self.current_session_processing:
             self.presence = self.current_resp_rate is not None
+            _LOGGER.error("PR: processing, value = " + str(self.presence))
+        _LOGGER.error("PR: not processing")
         self.presence = None
 
     async def update_user(self) -> None:
@@ -580,6 +582,7 @@ class EightUser:  # pylint: disable=too-many-public-methods
         self.current_side_temp = self.device.convert_raw_bed_temp_to_degrees(
             current_side_temp_raw, "c"
         )
+        _LOGGER.error(self.intervals)
 
     async def set_bed_side(self, side) -> None:
         side = str(side).lower()
